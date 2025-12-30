@@ -28,6 +28,22 @@ def serve_player(movie_id):
 def serve_categories():
     return send_from_directory(app.static_folder, 'categories.html')
 
+@app.route('/terms')
+def serve_terms():
+    return send_from_directory(app.static_folder, 'terms.html')
+
+@app.route('/privacy')
+def serve_privacy():
+    return send_from_directory(app.static_folder, 'privacy.html')
+
+@app.route('/contact')
+def serve_contact():
+    return send_from_directory(app.static_folder, 'contact.html')
+
+@app.route('/faq')
+def serve_faq():
+    return send_from_directory(app.static_folder, 'faq.html')
+
 @app.route('/<path:path>')
 def serve_static(path):
     return send_from_directory(app.static_folder, path)

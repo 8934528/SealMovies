@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Seal Movies</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .faq-page {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+        }
+        
+        .faq-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .faq-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid rgba(172, 225, 175, 0.3);
+        }
+        
+        .faq-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ACE1AF;
+        }
+        
+        .faq-header .subtitle {
+            color: #b0b0b0;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: rgba(77, 93, 83, 0.2);
+            border: 2px solid rgba(172, 225, 175, 0.3);
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-box input:focus {
+            border-color: #fd5c63;
+            box-shadow: 0 0 0 3px rgba(253, 92, 99, 0.2);
+        }
+        
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .faq-categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 3rem;
+        }
+        
+        .category-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(77, 93, 83, 0.2);
+            border: none;
+            border-radius: 50px;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-btn:hover {
+            background: rgba(77, 93, 83, 0.4);
+            color: white;
+        }
+        
+        .category-btn.active {
+            background: #fd5c63;
+            color: white;
+        }
+        
+        .faq-content {
+            background: rgba(77, 93, 83, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .faq-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .faq-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .faq-section h2 {
+            color: #fd5c63;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(253, 92, 99, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .faq-section h2 i {
+            font-size: 1.2rem;
+        }
+        
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .faq-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .faq-item.active {
+            background: rgba(172, 225, 175, 0.1);
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .faq-question-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: rgba(253, 92, 99, 0.2);
+            color: #fd5c63;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .faq-question i {
+            color: #ACE1AF;
+            transition: transform 0.3s;
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            color: #b0b0b0;
+            line-height: 1.7;
+            transition: max-height 0.3s ease-out, padding 0.3s;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 500px;
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .faq-answer li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+        
+        .faq-answer li:before {
+            content: "•";
+            color: #ACE1AF;
+            position: absolute;
+            left: 0;
+        }
+        
+        .highlight-box {
+            background: rgba(77, 93, 83, 0.2);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #ACE1AF;
+        }
+        
+        .highlight-box strong {
+            color: #ACE1AF;
+        }
+        
+        .contact-cta {
+            text-align: center;
+            padding: 2.5rem;
+            background: rgba(77, 93, 83, 0.1);
+            border-radius: 12px;
+            margin: 3rem 0;
+        }
+        
+        .contact-cta h2 {
+            color: #ACE1AF;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-cta p {
+            color: #b0b0b0;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .cta-button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .cta-button.primary {
+            background: #fd5c63;
+            color: white;
+        }
+        
+        .cta-button.secondary {
+            background: rgba(172, 225, 175, 0.2);
+            color: white;
+            border: 2px solid #ACE1AF;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            display: none;
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            color: #fd5c63;
+            margin-bottom: 1rem;
+        }
+        
+        .no-results h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .no-results p {
+            color: #b0b0b0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .legal-navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(77, 93, 83, 0.3);
+        }
+        
+        .nav-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(77, 93, 83, 0.3);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .nav-button:hover {
+            background: rgba(77, 93, 83, 0.5);
+        }
+        
+        .nav-button.primary {
+            background: #fd5c63;
+        }
+        
+        .nav-button.primary:hover {
+            background: #ff6b72;
+        }
+        
+        .faq-footer {
+            text-align: center;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(77, 93, 83, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .faq-container {
+                padding: 1rem;
+            }
+            
+            .faq-header h1 {
+                font-size: 2rem;
+            }
+            
+            .faq-question {
+                padding: 1.2rem;
+                font-size: 1rem;
+            }
+            
+            .faq-question-number {
+                width: 25px;
+                height: 25px;
+                line-height: 25px;
+                margin-right: 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+            }
+            
+            .legal-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-button {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body class="faq-page">
+    <div class="faq-container">
+        <header class="faq-header">
+            <div class="nav-brand" style="margin-bottom: 2rem;">
+                <a href="/home" style="text-decoration: none; color: white;">
+                    <i class="fas fa-play-circle"></i>
+                    <span>SEAL MOVIES</span>
+                </a>
+            </div>
+            <h1>Frequently Asked Questions</h1>
+            <p class="subtitle">Find answers to common questions about Seal Movies. Can't find what you're looking for? Contact our support team.</p>
+            
+            <div class="search-box">
+                <input type="text" id="faqSearch" placeholder="Search FAQ...">
+            </div>
+        </header>
+
+        <div class="faq-categories">
+            <button class="category-btn active" data-category="all">All Questions</button>
+            <button class="category-btn" data-category="general">General</button>
+            <button class="category-btn" data-category="account">Account</button>
+            <button class="category-btn" data-category="streaming">Streaming</button>
+            <button class="category-btn" data-category="technical">Technical</button>
+            <button class="category-btn" data-category="content">Content</button>
+            <button class="category-btn" data-category="legal">Legal</button>
+        </div>
+
+        <div class="faq-content">
+            <div class="no-results" id="noResults">
+                <i class="fas fa-search"></i>
+                <h3>No results found</h3>
+                <p>Try searching with different keywords or browse the categories above.</p>
+                <button class="cta-button secondary" onclick="resetSearch()">
+                    <i class="fas fa-redo"></i>
+                    Reset Search
+                </button>
+            </div>
+
+            <div class="faq-section" data-category="general">
+                <h2><i class="fas fa-question-circle"></i> General Questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item" data-search="free cost money price subscription">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">1</span>
+                                Is Seal Movies really free to use?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes! Seal Movies is completely free. We don't require any subscriptions, credit cards, or payments. This is a demonstration project built for educational purposes to showcase streaming platform functionality.</p>
+                            <div class="highlight-box">
+                                <strong>Note:</strong> In a real-world scenario, streaming platforms typically require licensing agreements and may have subscription models. This project demonstrates the technical implementation without commercial aspects.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" data-search="what is seal movies about">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">2</span>
+                                What is Seal Movies?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Seal Movies is a demonstration streaming platform that combines elements from popular services like YouTube, Netflix, and Goojara. It features:</p>
+                            <ul>
+                                <li>Free movie streaming</li>
+                                <li>Modern, responsive design</li>
+                                <li>Movie recommendations</li>
+                                <li>User accounts (demo)</li>
+                                <li>Search and categorization</li>
+                                <li>Video player with controls</li>
+                            </ul>
+                            <p>The project is built with Flask (Python backend) and vanilla JavaScript (frontend) with no database requirement.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" data-search="device compatible mobile phone tablet">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">3</span>
+                                What devices can I use to watch movies?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Seal Movies is fully responsive and works on:</p>
+                            <ul>
+                                <li><strong>Desktop computers</strong> (Windows, Mac, Linux)</li>
+                                <li><strong>Laptops</strong> with modern browsers</li>
+                                <li><strong>Tablets</strong> (iPad, Android tablets)</li>
+                                <li><strong>Smartphones</strong> (iPhone, Android phones)</li>
+                            </ul>
+                            <p><strong>Recommended browsers:</strong> Chrome, Firefox, Safari, Edge (latest versions)</p>
+                            <p>The platform uses HTML5 video player, so no additional plugins are required.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section" data-category="account">
+                <h2><i class="fas fa-user-circle"></i> Account & Profile</h2>
+                <div class="faq-list">
+                    <div class="faq-item" data-search="create account register sign up">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">4</span>
+                                How do I create an account?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Creating an account on Seal Movies is simple:</p>
+                            <ol>
+                                <li>Click the user icon in the top right corner of any page</li>
+                                <li>Select "Register" from the popup</li>
+                                <li>Enter any username and email (no real information required)</li>
+                                <li>Click "Create Account"</li>
+                            </ol>
+                            <div class="highlight-box">
+                                <strong>Demo Mode:</strong> This is a demonstration system. You can use any credentials - no email verification or real registration process is required.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" data-search="delete account remove profile">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">5</span>
+                                Can I delete my account?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Since this is a demonstration project, account data is stored locally in your browser. To "delete" your account:</p>
+                            <ul>
+                                <li>Log out using the user menu</li>
+                                <li>Clear your browser's local storage for this site</li>
+                            </ul>
+                            <p>In a production environment, account deletion would be available in the user settings with proper data removal procedures.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" data-search="forgot password reset login">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">6</span>
+                                I forgot my password. How can I reset it?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Since this is a demonstration project with no real authentication system, you can:</p>
+                            <ul>
+                                <li>Create a new account with any credentials</li>
+                                <li>Clear your browser data and start fresh</li>
+                            </ul>
+                            <p>In a real implementation, there would be a "Forgot Password" link on the login page that sends a password reset email to your registered address.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section" data-category="streaming">
+                <h2><i class="fas fa-play-circle"></i> Streaming & Video</h2>
+                <div class="faq-list">
+                    <div class="faq-item" data-search="video quality resolution hd 4k">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">7</span>
+                                What video quality is available?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Seal Movies streams demonstration videos at various qualities depending on the source. The platform supports:</p>
+                            <ul>
+                                <li><strong>SD (Standard Definition):</strong> 480p resolution</li>
+                                <li><strong>HD (High Definition):</strong> 720p resolution</li>
+                                <li><strong>Full HD:</strong> 1080p resolution</li>
+                            </ul>
+                            <p>The video player automatically adjusts quality based on your internet connection speed. You can manually select quality in the player settings (gear icon).</p>
+                            <p><strong>Note:</strong> These are demonstration videos from public test sources. In a real implementation, quality would depend on content licensing and server capabilities.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" data-search="buffering slow loading internet connection">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">8</span>
+                                Why is my video buffering or loading slowly?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>If you're experiencing buffering issues:</p>
+                            <ul>
+                                <li><strong>Check your internet connection:</strong> Streaming requires stable internet (minimum 5 Mbps for HD)</li>
+                                <li><strong>Try lowering video quality:</strong> Switch to 480p or 720p in player settings</li>
+                                <li><strong>Clear browser cache:</strong> Old cache files can slow down streaming</li>
+                                <li><strong>Try a different browser:</strong> Some browsers handle video streaming better than others</li>
+                                <li><strong>Restart your router:</strong> If other devices are also experiencing slow speeds</li>
+                            </ul>
+                            <p>Since this is a demonstration project, videos are streamed from public test servers that may have limitations.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" data-search="subtitles captions language audio">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">9</span>
+                                Are subtitles or multiple languages available?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>In this demonstration version, subtitles and multiple audio tracks are not implemented. However, the video player framework supports these features and they would be included in a production environment.</p>
+                            <p>Features that would be available in a real implementation:</p>
+                            <ul>
+                                <li>Multiple subtitle languages (English, Spanish, French, etc.)</li>
+                                <li>Closed captions for hearing impaired</li>
+                                <li>Multiple audio tracks (original language, dubs)</li>
+                                <li>Subtitle customization (size, color, background)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section" data-category="technical">
+                <h2><i class="fas fa-cogs"></i> Technical Support</h2>
+                <div class="faq-list">
+                    <div class="faq-item" data-search="video not playing error broken">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">10</span>
+                                Why won't the video play?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>If videos aren't playing, try these troubleshooting steps:</p>
+                            <ul>
+                                <li><strong>Update your browser:</strong> Ensure you're using the latest version</li>
+                                <li><strong>Enable JavaScript:</strong> Seal Movies requires JavaScript to function</li>
+                                <li><strong>Check browser permissions:</strong> Allow autoplay if prompted</li>
+                                <li><strong>Disable ad blockers:</strong> Some may interfere with video players</li>
+                                <li><strong>Try incognito mode:</strong> Rules out extension conflicts</li>
+                                <li><strong>Clear browser cache:</strong> Go to browser settings → Clear browsing data</li>
+                            </ul>
+                            <p>If problems persist, the demo video source might be temporarily unavailable. Try a different movie.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" data-search="keyboard shortcuts controls">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">11</span>
+                                What keyboard shortcuts are available?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Seal Movies supports the following keyboard shortcuts:</p>
+                            <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid rgba(77, 93, 83, 0.3); color: #ACE1AF; font-weight: 500;">Space</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid rgba(77, 93, 83, 0.3); color: #b0b0b0;">Play/Pause video</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid rgba(77, 93, 83, 0.3); color: #ACE1AF; font-weight: 500;">F</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid rgba(77, 93, 83, 0.3); color: #b0b0b0;">Toggle fullscreen</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid rgba(77, 93, 83, 0.3); color: #ACE1AF; font-weight: 500;">M</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid rgba(77, 93, 83, 0.3); color: #b0b0b0;">Mute/Unmute</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid rgba(77, 93, 83, 0.3); color: #ACE1AF; font-weight: 500;">/</td>
+                                    <td style="padding: 0.5rem; border-bottom: 1px solid rgba(77, 93, 83, 0.3); color: #b0b0b0;">Focus search box</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.5rem; color: #ACE1AF; font-weight: 500;">← →</td>
+                                    <td style="padding: 0.5rem; color: #b0b0b0;">Seek backward/forward 10 seconds</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section" data-category="content">
+                <h2><i class="fas fa-film"></i> Content & Library</h2>
+                <div class="faq-list">
+                    <div class="faq-item" data-search="movie not found missing">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">12</span>
+                                Why can't I find a specific movie?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Seal Movies is a demonstration project with a limited selection of movies. The current library includes:</p>
+                            <ul>
+                                <li>8 demonstration movies across various genres</li>
+                                <li>Sample content for testing features</li>
+                                <li>Publicly available test videos</li>
+                            </ul>
+                            <p>In a real streaming service, you would expect:</p>
+                            <ul>
+                                <li>Thousands of movies and TV shows</li>
+                                <li>Regular new releases</li>
+                                <li>Exclusive original content</li>
+                                <li>International films</li>
+                                <li>Classics and new releases</li>
+                            </ul>
+                            <p>This project focuses on demonstrating the platform's functionality rather than providing extensive content.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" data-search="new movies added updated">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">13</span>
+                                How often is new content added?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>As a demonstration project, the content library is static and doesn't receive regular updates. However, the system is designed to support:</p>
+                            <ul>
+                                <li>Automatic content updates via an admin panel</li>
+                                <li>Scheduled new releases</li>
+                                <li>Seasonal collections</li>
+                                <li>User-generated playlists</li>
+                            </ul>
+                            <p>In a production environment, new content would be added based on:</p>
+                            <ul>
+                                <li>Licensing agreements with studios</li>
+                                <li>Theatrical release schedules</li>
+                                <li>User demand and viewing trends</li>
+                                <li>Special events and holidays</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section" data-category="legal">
+                <h2><i class="fas fa-balance-scale"></i> Legal & Copyright</h2>
+                <div class="faq-list">
+                    <div class="faq-item" data-search="copyright legal streaming free">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">14</span>
+                                Is it legal to stream movies for free?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="highlight-box">
+                                <strong>Important:</strong> Seal Movies is a demonstration project for educational purposes only. The streaming videos are from public test sources and are not copyrighted commercial content.
+                            </div>
+                            <p>In the real world, streaming movies typically requires:</p>
+                            <ul>
+                                <li>Licensing agreements with content owners</li>
+                                <li>Royalty payments to creators</li>
+                                <li>Compliance with copyright laws</li>
+                                <li>Geographic restrictions based on licensing</li>
+                            </ul>
+                            <p>Legitimate free streaming services exist through:</p>
+                            <ul>
+                                <li>Ad-supported models (like YouTube)</li>
+                                <li>Public domain content</li>
+                                <li>Creator-approved free distribution</li>
+                                <li>Library partnerships</li>
+                            </ul>
+                            <p>Always ensure you're using legal streaming services that respect copyright laws.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item" data-search="report copyright infringement dmca">
+                        <div class="faq-question">
+                            <div>
+                                <span class="faq-question-number">15</span>
+                                How do I report copyright infringement?
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Since this is a demonstration project using public test content, copyright infringement shouldn't be an issue. However, in a real implementation, there would be:</p>
+                            <ul>
+                                <li>A dedicated DMCA/copyright agent</li>
+                                <li>Clear reporting procedures on the website</li>
+                                <li>Contact information for legal inquiries</li>
+                                <li>Prompt takedown procedures for infringing content</li>
+                            </ul>
+                            <p>For this demonstration project, if you have concerns, you can:</p>
+                            <ul>
+                                <li>Contact us through the <a href="/contact" style="color: #ACE1AF;">Contact page</a></li>
+                                <li>Reference the <a href="/privacy" style="color: #ACE1AF;">Privacy Policy</a> and <a href="/terms" style="color: #ACE1AF;">Terms of Service</a></li>
+                                <li>Note that all content is from public test sources</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-cta">
+            <h2>Still have questions?</h2>
+            <p>Can't find the answer you're looking for? Our support team is here to help you with any questions or issues you might have.</p>
+            <div class="cta-buttons">
+                <a href="/contact" class="cta-button primary">
+                    <i class="fas fa-envelope"></i>
+                    Contact Support
+                </a>
+                <a href="/home" class="cta-button secondary">
+                    <i class="fas fa-play-circle"></i>
+                    Back to Streaming
+                </a>
+            </div>
+        </div>
+
+        <div class="legal-navigation">
+            <a href="/terms" class="nav-button">
+                <i class="fas fa-file-contract"></i>
+                Terms of Service
+            </a>
+            <a href="/home" class="nav-button primary">
+                <i class="fas fa-home"></i>
+                Back to Home
+            </a>
+            <a href="/privacy" class="nav-button">
+                <i class="fas fa-shield-alt"></i>
+                Privacy Policy
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <div class="faq-footer">
+            <p>© 2025 Seal Movies. This FAQ is for demonstration purposes.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">Last Updated: December 2024</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            const searchInput = document.getElementById('faqSearch');
+            const noResults = document.getElementById('noResults');
+            const faqSections = document.querySelectorAll('.faq-section');
+            
+            let visibleItems = 0;
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    const section = item.closest('.faq-section');
+                    const sectionItems = section.querySelectorAll('.faq-item');
+                    sectionItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    item.classList.toggle('active');
+                });
+            });
+            
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    const category = button.dataset.category;
+                    filterFAQs(category, searchInput.value);
+                });
+            });
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const activeCategory = document.querySelector('.category-btn.active').dataset.category;
+                filterFAQs(activeCategory, searchTerm);
+            });
+            
+            let searchTimeout;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const searchTerm = this.value.toLowerCase();
+                    const activeCategory = document.querySelector('.category-btn.active').dataset.category;
+                    filterFAQs(activeCategory, searchTerm);
+                }, 300);
+            });
+            
+            function filterFAQs(category, searchTerm = '') {
+                let totalVisible = 0;
+                let anySectionVisible = false;
+                
+                faqSections.forEach(section => {
+                    const sectionCategory = section.dataset.category;
+                    const sectionItems = section.querySelectorAll('.faq-item');
+                    let sectionVisibleItems = 0;
+                    let sectionHasVisible = false;
+                    
+                    sectionItems.forEach(item => {
+                        const searchData = item.dataset.search || '';
+                        const questionText = item.querySelector('.faq-question').textContent.toLowerCase();
+                        const answerText = item.querySelector('.faq-answer').textContent.toLowerCase();
+                        const fullText = questionText + ' ' + answerText + ' ' + searchData;
+                        
+                        const matchesCategory = category === 'all' || sectionCategory === category;
+                        const matchesSearch = !searchTerm || fullText.includes(searchTerm);
+                        
+                        if (matchesCategory && matchesSearch) {
+                            item.style.display = 'block';
+                            sectionVisibleItems++;
+                            totalVisible++;
+                            sectionHasVisible = true;
+                        } else {
+                            item.style.display = 'none';
+                            item.classList.remove('active');
+                        }
+                    });
+                    
+                    if (sectionHasVisible) {
+                        section.style.display = 'block';
+                        anySectionVisible = true;
+                        
+                        let number = 1;
+                        sectionItems.forEach(item => {
+                            if (item.style.display !== 'none') {
+                                const numberSpan = item.querySelector('.faq-question-number');
+                                if (numberSpan) {
+                                    numberSpan.textContent = number;
+                                    number++;
+                                }
+                            }
+                        });
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+                
+                if (totalVisible === 0) {
+                    noResults.style.display = 'block';
+                    document.querySelector('.faq-content').style.display = 'none';
+                    document.querySelector('.contact-cta').style.display = 'none';
+                } else {
+                    noResults.style.display = 'none';
+                    document.querySelector('.faq-content').style.display = 'block';
+                    document.querySelector('.contact-cta').style.display = 'block';
+                }
+            }
+            
+            window.resetSearch = function() {
+                searchInput.value = '';
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                document.querySelector('[data-category="all"]').classList.add('active');
+                filterFAQs('all', '');
+                searchInput.focus();
+            };
+            
+            if (faqItems.length > 0) {
+                faqItems[0].classList.add('active');
+            }
+            
+            filterFAQs('all', '');
+        });
+    </script>
+</body>
+</html>

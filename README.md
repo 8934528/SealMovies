@@ -67,6 +67,10 @@ Seal Movies is a unique, free movie streaming platform inspired by YouTube's sim
     │   ├── home.html
     │   ├── player.html
     │   ├── categories.html
+    │   ├── terms.html
+    │   ├── privacy.html
+    │   ├── contact.html
+    │   ├── faq.html
     │   ├── style.css
     │   ├── script.js
     │   └── auth.js

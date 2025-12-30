@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Seal Movies</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .contact-page {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+        }
+        
+        .contact-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .contact-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid rgba(253, 92, 99, 0.3);
+        }
+        
+        .contact-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #fd5c63;
+        }
+        
+        .contact-header .subtitle {
+            color: #b0b0b0;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+        
+        .contact-info {
+            background: rgba(77, 93, 83, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+        
+        .contact-info h2 {
+            color: #ACE1AF;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .contact-method {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .contact-method:hover {
+            transform: translateX(5px);
+        }
+        
+        .method-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(253, 92, 99, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .method-icon i {
+            font-size: 1.2rem;
+            color: #fd5c63;
+        }
+        
+        .method-content h3 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .method-content p {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .method-link {
+            color: #ACE1AF;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .contact-form-section {
+            background: rgba(77, 93, 83, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+        
+        .contact-form-section h2 {
+            color: #ACE1AF;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            color: white;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(77, 93, 83, 0.5);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #ACE1AF;
+            box-shadow: 0 0 0 2px rgba(172, 225, 175, 0.2);
+        }
+        
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ACE1AF' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #fd5c63;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: background 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: #ff6b72;
+        }
+        
+        .submit-btn:disabled {
+            background: #4D5D53;
+            cursor: not-allowed;
+        }
+        
+        .form-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+        
+        .form-status.success {
+            background: rgba(172, 225, 175, 0.2);
+            color: #ACE1AF;
+            display: block;
+        }
+        
+        .form-status.error {
+            background: rgba(253, 92, 99, 0.2);
+            color: #fd5c63;
+            display: block;
+        }
+        
+        .faq-preview {
+            background: rgba(77, 93, 83, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .faq-preview h2 {
+            color: #ACE1AF;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .faq-question i {
+            color: #fd5c63;
+            transition: transform 0.3s;
+        }
+        
+        .faq-answer {
+            padding: 0 1rem;
+            max-height: 0;
+            overflow: hidden;
+            color: #b0b0b0;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 0 1rem 1rem;
+            max-height: 500px;
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        .legal-navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(77, 93, 83, 0.3);
+        }
+        
+        .nav-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(77, 93, 83, 0.3);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .nav-button:hover {
+            background: rgba(77, 93, 83, 0.5);
+        }
+        
+        .nav-button.primary {
+            background: #fd5c63;
+        }
+        
+        .nav-button.primary:hover {
+            background: #ff6b72;
+        }
+        
+        .contact-footer {
+            text-align: center;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(77, 93, 83, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .contact-container {
+                padding: 1rem;
+            }
+            
+            .contact-header h1 {
+                font-size: 2rem;
+            }
+            
+            .legal-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-button {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body class="contact-page">
+    <div class="contact-container">
+        <header class="contact-header">
+            <div class="nav-brand" style="margin-bottom: 2rem;">
+                <a href="/home" style="text-decoration: none; color: white;">
+                    <i class="fas fa-play-circle"></i>
+                    <span>SEAL MOVIES</span>
+                </a>
+            </div>
+            <h1>Contact Us</h1>
+            <p class="subtitle">Have questions, feedback, or need support? We're here to help! Get in touch with our team through any of the methods below.</p>
+        </header>
+
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h2>Get in Touch</h2>
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <div class="method-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="method-content">
+                            <h3>Email Support</h3>
+                            <p>For general inquiries and support</p>
+                            <a href="mailto:support@sealmovies.com" class="method-link">support@sealmovies.com</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <div class="method-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div class="method-content">
+                            <h3>Help Center</h3>
+                            <p>Browse our FAQ and help articles</p>
+                            <a href="/faq" class="method-link">Visit FAQ Page →</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <div class="method-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <div class="method-content">
+                            <h3>Report Issues</h3>
+                            <p>Found a bug or technical problem?</p>
+                            <a href="mailto:bugs@sealmovies.com" class="method-link">bugs@sealmovies.com</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <div class="method-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <div class="method-content">
+                            <h3>Legal Inquiries</h3>
+                            <p>For copyright and legal matters</p>
+                            <a href="mailto:legal@sealmovies.com" class="method-link">legal@sealmovies.com</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(77, 93, 83, 0.3);">
+                    <h3 style="color: #fd5c63; font-size: 1.1rem; margin-bottom: 0.5rem;">Response Time</h3>
+                    <p style="color: #b0b0b0; font-size: 0.9rem;">We typically respond within 24-48 hours for support inquiries. For urgent matters, please include "URGENT" in your subject line.</p>
+                </div>
+            </div>
+
+            <div class="contact-form-section">
+                <h2>Send a Message</h2>
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Your Name *</label>
+                            <input type="text" id="name" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address *</label>
+                            <input type="email" id="email" class="form-input" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="subject">Subject *</label>
+                        <select id="subject" class="form-select" required>
+                            <option value="" disabled selected>Select a topic</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="bug">Report a Bug</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="content">Content Issue</option>
+                            <option value="legal">Legal Matter</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="message">Message *</label>
+                        <textarea id="message" class="form-textarea" required placeholder="Please provide as much detail as possible..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="color: #b0b0b0; font-size: 0.9rem; display: flex; align-items: flex-start; gap: 0.5rem;">
+                            <input type="checkbox" id="consent" required style="margin-top: 0.2rem;">
+                            <span>I agree to the <a href="/terms" style="color: #ACE1AF;">Terms of Service</a> and understand that this is a demonstration project. My information will be used only to respond to this inquiry.</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Message
+                    </button>
+                    
+                    <div id="formStatus" class="form-status"></div>
+                </form>
+            </div>
+        </div>
+
+        <div class="faq-preview">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Is Seal Movies really free?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! Seal Movies is completely free to use. We don't require any subscriptions, credit cards, or payments. This is a demonstration project for educational purposes.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How do I create an account?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Click the user icon in the top right corner and select "Register". You can use any email and password for demonstration purposes - no real registration required.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Why can't I find a specific movie?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Seal Movies is a demonstration project with a limited selection of movies. In a real implementation, the catalog would be much larger and regularly updated.</p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <a href="/faq" class="nav-button" style="display: inline-flex;">
+                    <i class="fas fa-question-circle"></i>
+                    View All FAQ
+                </a>
+            </div>
+        </div>
+
+        <div class="legal-navigation">
+            <a href="/terms" class="nav-button">
+                <i class="fas fa-file-contract"></i>
+                Terms of Service
+            </a>
+            <a href="/home" class="nav-button primary">
+                <i class="fas fa-home"></i>
+                Back to Home
+            </a>
+            <a href="/privacy" class="nav-button">
+                <i class="fas fa-shield-alt"></i>
+                Privacy Policy
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <div class="contact-footer">
+            <p>© 2025 Seal Movies. This contact system is for demonstration purposes.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">Note: This is a demo project. Emails sent through this form are not actually delivered.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
+            
+            const contactForm = document.getElementById('contactForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const formStatus = document.getElementById('formStatus');
+            
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                
+                setTimeout(() => {
+                    formStatus.className = 'form-status success';
+                    formStatus.innerHTML = `
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Message Sent Successfully!</strong>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Thank you for contacting us. This is a demonstration - in a real implementation, your message would be delivered to our team.</p>
+                    `;
+                    
+                    contactForm.reset();
+                    
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+                    
+                    formStatus.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    
+                    setTimeout(() => {
+                        formStatus.style.opacity = '0';
+                        formStatus.style.transition = 'opacity 0.5s';
+                        setTimeout(() => {
+                            formStatus.className = 'form-status';
+                            formStatus.style.opacity = '1';
+                        }, 500);
+                    }, 10000);
+                    
+                }, 1500);
+            });
+            
+            const formInputs = contactForm.querySelectorAll('input, select, textarea');
+            formInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.checkValidity()) {
+                        this.style.borderColor = '#ACE1AF';
+                    } else {
+                        this.style.borderColor = '#fd5c63';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
