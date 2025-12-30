@@ -5,7 +5,7 @@
 ![Flask](https://img.shields.io/badge/Flask-2.0+-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-Seal Movies is a unique, free movie streaming platform inspired by YouTube's simplicity, Netflix's design, and Goojara's content accessibility. No subscriptions, no credit cards required.
+Seal Movies is a unique, free movie streaming platform. No subscriptions, no credit cards required.
 
 ---
 
