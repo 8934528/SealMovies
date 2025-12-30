@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seal Movies - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/home">
+                    <i class="fas fa-play-circle"></i>
+                    <span>SEAL MOVIES</span>
+                </a>
+            </div>
+            
+            <div class="nav-search">
+                <input type="text" id="searchInput" placeholder="Search movies...">
+                <button id="searchBtn" title="search">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            
+            <div class="nav-actions">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="/categories" class="nav-link">
+                    <i class="fas fa-th-large"></i>
+                    <span>Categories</span>
+                </a>
+                <button id="randomBtn" class="nav-button">
+                    <i class="fas fa-random"></i>
+                    <span>Random</span>
+                </button>
+                <div class="user-menu">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="hero-banner">
+            <div class="banner-content">
+                <h1>What to watch tonight?</h1>
+                <p>Discover thousands of free movies in every genre</p>
+                <div class="banner-actions">
+                    <button id="trendingBtn">
+                        <i class="fas fa-fire"></i>
+                        Trending Now
+                    </button>
+                    <button id="newReleasesBtn">
+                        <i class="fas fa-star"></i>
+                        New Releases
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-crown"></i> Featured Movies</h2>
+                <a href="/categories" class="view-all">View All</a>
+            </div>
+            <div class="movies-grid" id="featuredMovies">
+                <!-- movies will be displayed here -->
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-line"></i> Trending Now</h2>
+            </div>
+            <div class="movies-grid" id="trendingMovies">
+                <!-- Trending movies will be displyed here -->
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-tags"></i> Browse Categories</h2>
+            </div>
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Categories will be displyaed here -->
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-clock"></i> Recently Added</h2>
+            </div>
+            <div class="movies-grid" id="recentMovies">
+                <!-- Recent movies will be displayed here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>SEAL MOVIES</h3>
+                <p>Free streaming for everyone, forever.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="/home">Home</a>
+                <a href="/categories">Categories</a>
+                <a href="#">Trending</a>
+                <a href="#">New Releases</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="#">Help Center</a>
+                <a href="#">Contact Us</a>
+                <a href="#">FAQ</a>
+                <a href="#">Report Issue</a>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Content Policy</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Seal Movies. This is a free streaming service. All content is publicly available.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/movies/featured')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayMovies(data.movies, 'featuredMovies');
+                    }
+                });
+
+            fetch('/api/trending')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayMovies(data.movies, 'trendingMovies');
+                    }
+                });
+
+            fetch('/api/categories')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayCategories(data.categories);
+                    }
+                });
+
+            fetch('/api/movies')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const recentMovies = [...data.movies]
+                            .sort((a, b) => new Date(b.upload_date) - new Date(a.upload_date))
+                            .slice(0, 8);
+                        displayMovies(recentMovies, 'recentMovies');
+                    }
+                });
+
+            document.getElementById('searchBtn').addEventListener('click', performSearch);
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            document.getElementById('randomBtn').addEventListener('click', function() {
+                fetch('/api/random')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = `/player/${data.movie.id}`;
+                        }
+                    });
+            });
+
+            document.getElementById('trendingBtn').addEventListener('click', function() {
+                document.getElementById('trendingMovies').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value;
+            if (query.trim()) {
+                window.location.href = `/categories?search=${encodeURIComponent(query)}`;
+            }
+        }
+
+        function displayMovies(movies, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            movies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.className = 'movie-card';
+                movieCard.innerHTML = `
+                    <div class="movie-poster" style="background-image: url('${movie.poster}')">
+                        <div class="movie-overlay">
+                            <div class="movie-rating">${movie.rating}</div>
+                            <div class="movie-duration">${movie.duration}</div>
+                            <button class="play-btn" onclick="window.location.href='/player/${movie.id}'">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <div class="movie-meta">
+                            <span>${movie.year}</span>
+                            <span>•</span>
+                            <span>${movie.genre.join(', ')}</span>
+                        </div>
+                        <div class="movie-views">
+                            <i class="fas fa-eye"></i>
+                            ${(movie.views / 1000000).toFixed(1)}M views
+                        </div>
+                    </div>
+                `;
+                container.appendChild(movieCard);
+            });
+        }
+
+        function displayCategories(categories) {
+            const container = document.getElementById('categoriesGrid');
+            container.innerHTML = '';
+            
+            categories.forEach(category => {
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'category-card';
+                categoryCard.style.backgroundColor = category.color;
+                categoryCard.innerHTML = `
+                    <div class="category-content">
+                        <h3>${category.name}</h3>
+                        <button onclick="window.location.href='/categories?category=${category.id}'">
+                            Explore <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="category-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                `;
+                container.appendChild(categoryCard);
+            });
+        }
+    </script>
+</body>
+</html>

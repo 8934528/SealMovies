@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seal Movies - Categories</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class="categories-page">
+    <nav class="categories-nav">
+        <div class="nav-container">
+            <a href="/home" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back
+            </a>
+            <div class="nav-brand">
+                <i class="fas fa-tags"></i>
+                <span>BROWSE CATEGORIES</span>
+            </div>
+            <div class="nav-search">
+                <input type="text" id="categorySearch" placeholder="Search categories or movies...">
+                <button id="categorySearchBtn" title="search">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="categories-content">
+        <section class="categories-section">
+            <h2><i class="fas fa-layer-group"></i> All Categories</h2>
+            <div class="all-categories-grid" id="allCategories">
+                <!-- Categories will be displayed here -->
+            </div>
+        </section>
+
+        <section class="movies-section">
+            <div class="section-header">
+                <h2 id="categoryTitle"><i class="fas fa-film"></i> Movies</h2>
+                <div class="sort-controls">
+                    <select id="sortSelect" title="aort selector">
+                        <option value="newest">Newest First</option>
+                        <option value="popular">Most Popular</option>
+                        <option value="rating">Highest Rated</option>
+                        <option value="title">Title A-Z</option>
+                    </select>
+                </div>
+            </div>
+            <div class="movies-container" id="moviesContainer">
+                <!-- Movies will be displayed here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="categories-footer">
+        <p>Browse thousands of free movies organized by category</p>
+        <div class="footer-actions">
+            <button onclick="window.location.href='/home'">
+                <i class="fas fa-home"></i>
+                Home
+            </button>
+            <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+                <i class="fas fa-arrow-up"></i>
+                Top
+            </button>
+            <button id="categoriesRandomBtn">
+                <i class="fas fa-random"></i>
+                Surprise Me
+            </button>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+            const searchQuery = urlParams.get('search');
+            const sortSelect = document.getElementById('sortSelect');
+            const searchInput = document.getElementById('categorySearch');
+            const searchBtn = document.getElementById('categorySearchBtn');
+            const randomBtn = document.getElementById('categoriesRandomBtn');
+
+            fetch('/api/categories')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayAllCategories(data.categories);
+                    }
+                });
+
+            if (searchQuery) {
+                searchInput.value = searchQuery;
+                searchMovies(searchQuery);
+                document.getElementById('categoryTitle').innerHTML = `<i class="fas fa-search"></i> Search Results for "${searchQuery}"`;
+            } else if (category) {
+                loadCategoryMovies(category);
+            } else {
+                loadAllMovies();
+            }
+
+            searchBtn.addEventListener('click', performCategorySearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performCategorySearch();
+                }
+            });
+
+            sortSelect.addEventListener('change', function() {
+                sortMovies(this.value);
+            });
+
+            randomBtn.addEventListener('click', function() {
+                fetch('/api/random')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = `/player/${data.movie.id}`;
+                        }
+                    });
+            });
+        });
+
+        function performCategorySearch() {
+            const query = searchInput.value;
+            if (query.trim()) {
+                window.location.href = `/categories?search=${encodeURIComponent(query)}`;
+            }
+        }
+
+        function displayAllCategories(categories) {
+            const container = document.getElementById('allCategories');
+            container.innerHTML = '';
+            
+            categories.forEach(category => {
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'full-category-card';
+                categoryCard.style.borderLeftColor = category.color;
+                categoryCard.innerHTML = `
+                    <div class="full-category-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <div class="full-category-info">
+                        <h3>${category.name}</h3>
+                        <p>Explore ${category.name.toLowerCase()} movies</p>
+                    </div>
+                    <button onclick="window.location.href='/categories?category=${category.id}'">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                `;
+                container.appendChild(categoryCard);
+            });
+        }
+
+        function loadCategoryMovies(category) {
+            fetch(`/api/movies?category=${category}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayMovies(data.movies);
+                        fetch('/api/categories')
+                            .then(res => res.json())
+                            .then(catData => {
+                                if (catData.success) {
+                                    const cat = catData.categories.find(c => c.id === category);
+                                    if (cat) {
+                                        document.getElementById('categoryTitle').innerHTML = 
+                                            `<i class="fas fa-film"></i> ${cat.name} Movies`;
+                                    }
+                                }
+                            });
+                    }
+                });
+        }
+
+        function loadAllMovies() {
+            fetch('/api/movies')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayMovies(data.movies);
+                    }
+                });
+        }
+
+        function searchMovies(query) {
+            fetch(`/api/search?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayMovies(data.results);
+                    }
+                });
+        }
+
+        function displayMovies(movies) {
+            const container = document.getElementById('moviesContainer');
+            container.innerHTML = '';
+            
+            if (movies.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-film"></i>
+                        <h3>No movies found</h3>
+                        <p>Try searching for something else</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            movies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.className = 'category-movie-card';
+                movieCard.innerHTML = `
+                    <div class="category-movie-poster" style="background-image: url('${movie.poster}')">
+                        <div class="category-movie-overlay">
+                            <button onclick="window.location.href='/player/${movie.id}'">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="quick-info">
+                                <span>${movie.rating}</span>
+                                <span>${movie.duration}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-movie-info">
+                        <h3>${movie.title}</h3>
+                        <div class="category-movie-meta">
+                            <span>${movie.year}</span>
+                            <span>•</span>
+                            <span>${movie.genre.join(', ')}</span>
+                        </div>
+                        <p class="category-movie-desc">${movie.description.substring(0, 100)}...</p>
+                        <div class="category-movie-stats">
+                            <span><i class="fas fa-eye"></i> ${(movie.views / 1000000).toFixed(1)}M views</span>
+                            <button onclick="window.location.href='/player/${movie.id}'">
+                                Watch Now
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(movieCard);
+            });
+        }
+
+        function sortMovies(sortBy) {
+            const container = document.getElementById('moviesContainer');
+            const movies = Array.from(container.children);
+            
+            movies.sort((a, b) => {
+                const aTitle = a.querySelector('h3').textContent;
+                const bTitle = b.querySelector('h3').textContent;
+                const aRating = parseFloat(a.querySelector('.quick-info span').textContent);
+                const bRating = parseFloat(b.querySelector('.quick-info span').textContent);
+                const aViews = parseFloat(a.querySelector('.category-movie-stats span').textContent);
+                const bViews = parseFloat(b.querySelector('.category-movie-stats span').textContent);
+                
+                switch(sortBy) {
+                    case 'title':
+                        return aTitle.localeCompare(bTitle);
+                    case 'rating':
+                        return bRating - aRating;
+                    case 'popular':
+                        return bViews - aViews;
+                    case 'newest':
+                    default:
+                        return 0; 
+                }
+            });
+            
+            movies.forEach(movie => container.appendChild(movie));
+        }
+    </script>
+</body>
+</html>

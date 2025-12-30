@@ -10,7 +10,7 @@
 
     ```bash
     git clone <repository-url>
-    cd car-dashboard
+    cd SealMovies
 
 2. Install backend dependencies:
 
@@ -33,18 +33,30 @@
 ## Project Structure
 
     SealMovies/
-        │
-        ├── backend/
-        │   └── manager.py
-        │
-        ├── frontend/
-        │   ├── assets/
-        │   ├── index.html
-        │   ├── style.css
-        │   └── script.js
-        │
-        ├── app.py
-        ├── requirements.txt
-        └── README.md
+    │
+    ├── backend/
+    │   ├── __init__.py
+    │   ├── manager.py
+    │   └── movie_data.py
+    │
+    ├── frontend/
+    │   ├── assets/
+    │   │   ├── images/
+    │   │   │   ├── seal-logo.png
+    │   │   │   ├── placeholder-poster.jpg
+    │   │   │   └── user-avatar.png
+    │   │   └── fonts/
+    │   │
+    │   ├── index.html
+    │   ├── home.html
+    │   ├── player.html
+    │   ├── categories.html
+    │   ├── style.css
+    │   ├── script.js
+    │   └── auth.js
+    │
+    ├── app.py
+    ├── requirements.txt
+    └── README.md
 
 ##

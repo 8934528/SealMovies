@@ -3,15 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seal</title>
+    <title>Seal Movies - Free Streaming</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <h1>Welcome to Seal</h1>
-        <p>Start watching movies now for free.</p>
-        <button id="getStartedBtn">Get Started</button>
+<body class="landing-page">
+    <div class="landing-container">
+        <nav class="landing-nav">
+            <div class="nav-brand">
+                <i class="fas fa-play-circle"></i>
+                <span class="logo-text">SEAL</span>
+                <span class="logo-subtext">MOVIES</span>
+            </div>
+        </nav>
+
+        <main class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="title-line">Watch</span>
+                    <span class="title-line">Movies <span class="highlight">Free</span></span>
+                    <span class="title-line">Forever</span>
+                </h1>
+                
+                <p class="hero-description">
+                    Experience the largest collection of free movies in HD quality. 
+                    No subscriptions, no credit cards, just pure entertainment.
+                </p>
+                
+                <div class="hero-stats">
+                    <div class="stat">
+                        <i class="fas fa-film"></i>
+                        <span>1000+ Movies</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-hd"></i>
+                        <span>HD Quality</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-globe"></i>
+                        <span>Worldwide</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-bolt"></i>
+                        <span>No Ads</span>
+                    </div>
+                </div>
+                
+                <div class="cta-buttons">
+                    <button id="getStartedBtn" class="cta-primary">
+                        <i class="fas fa-play"></i>
+                        Start Watching
+                    </button>
+                    <button id="exploreBtn" class="cta-secondary">
+                        <i class="fas fa-compass"></i>
+                        Explore Library
+                    </button>
+                </div>
+            </div>
+            
+            <div class="hero-preview">
+                <div class="preview-card">
+                    <div class="preview-header">
+                        <span class="preview-badge">Now Playing</span>
+                        <div class="preview-controls">
+                            <i class="fas fa-play"></i>
+                            <i class="fas fa-volume-up"></i>
+                            <i class="fas fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="preview-content">
+                        <h3>Quantum Heist</h3>
+                        <p>Scientists plan the ultimate quantum robbery</p>
+                        <div class="preview-tags">
+                            <span>Sci-Fi</span>
+                            <span>Action</span>
+                            <span>2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Instant Play</h3>
+                <p>No buffering, start watching immediately</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>Any Device</h3>
+                <p>Watch on phone, tablet, or computer</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Safe & Secure</h3>
+                <p>Your privacy is our priority</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-sync"></i>
+                </div>
+                <h3>Daily Updates</h3>
+                <p>New movies added every day</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="landing-footer">
+            <p>© 2025 Seal Movies. All content is provided for free streaming.</p>
+            <div class="footer-links">
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+                <a href="#">Contact</a>
+                <a href="#">FAQ</a>
+            </div>
+        </footer>
+    </div>
+
     <script src="script.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        document.getElementById('getStartedBtn').addEventListener('click', function() {
+            window.location.href = '/home';
+        });
+        
+        document.getElementById('exploreBtn').addEventListener('click', function() {
+            window.location.href = '/categories';
+        });
+    </script>
 </body>
 </html>

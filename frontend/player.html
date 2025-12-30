@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seal Movies - Player</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class="player-page">
+    <nav class="player-nav">
+        <div class="nav-container">
+            <a href="/home" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+            <div class="nav-brand">
+                <i class="fas fa-play-circle"></i>
+                <span>SEAL MOVIES</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="player-container">
+        <div class="video-section">
+            <div class="video-container">
+                <video id="moviePlayer" controls autoplay>
+                    <source src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="player-controls">
+                    <button id="playPauseBtn" title="Pause" class="control-btn">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <input type="range" id="progressBar" title="range" value="0" max="100">
+                    <div class="time-display">
+                        <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                    </div>
+                    <button id="fullscreenBtn" title="fullscreen" class="control-btn">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button id="volumeBtn" title="volume" class="control-btn">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                    <input type="range" id="volumeBar" title="volume bar" value="100" max="100">
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="movie-header" id="movieHeader">
+                <!-- Movie info will be displyed here -->
+            </div>
+            <div class="movie-details" id="movieDetails">
+                <!-- Movie details will be displayed here -->
+            </div>
+            <div class="recommendations-section">
+                <h3><i class="fas fa-thumbs-up"></i> You Might Also Like</h3>
+                <div class="recommendations-grid" id="recommendationsGrid">
+                    <!-- Recommendations will be displyayed here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section class="comments-section">
+        <div class="section-header">
+            <h3><i class="fas fa-comments"></i> Community Discussions</h3>
+            <button id="addCommentBtn">
+                <i class="fas fa-plus"></i>
+                Add Comment
+            </button>
+        </div>
+        <div class="comments-container" id="commentsContainer">
+            <!-- Comments will be dislpyaed here -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="player-footer">
+        <p>Watch more free movies on <a href="/home">Seal Movies</a></p>
+        <div class="footer-actions">
+            <button onclick="window.location.href='/home'">
+                <i class="fas fa-home"></i>
+                Home
+            </button>
+            <button onclick="window.location.href='/categories'">
+                <i class="fas fa-th-large"></i>
+                Categories
+            </button>
+            <button id="randomMovieBtn">
+                <i class="fas fa-random"></i>
+                Random Movie
+            </button>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const movieId = window.location.pathname.split('/').pop();
+            const videoPlayer = document.getElementById('moviePlayer');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const progressBar = document.getElementById('progressBar');
+            const volumeBar = document.getElementById('volumeBar');
+            const volumeBtn = document.getElementById('volumeBtn');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const currentTimeEl = document.getElementById('currentTime');
+            const durationEl = document.getElementById('duration');
+            const randomMovieBtn = document.getElementById('randomMovieBtn');
+
+            fetch(`/api/movies/${movieId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const movie = data.movie;
+                        displayMovieInfo(movie);
+                        videoPlayer.src = movie.stream_url;
+                        
+                        fetch(`/api/movies/${movieId}/watch`, { method: 'POST' });
+                        
+                        loadRecommendations(movieId);
+                    }
+                });
+
+            loadComments();
+
+            videoPlayer.addEventListener('loadedmetadata', function() {
+                durationEl.textContent = formatTime(videoPlayer.duration);
+            });
+
+            videoPlayer.addEventListener('timeupdate', function() {
+                const progress = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+                progressBar.value = progress;
+                currentTimeEl.textContent = formatTime(videoPlayer.currentTime);
+            });
+
+            playPauseBtn.addEventListener('click', function() {
+                if (videoPlayer.paused) {
+                    videoPlayer.play();
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                } else {
+                    videoPlayer.pause();
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            });
+
+            progressBar.addEventListener('input', function() {
+                const time = (this.value / 100) * videoPlayer.duration;
+                videoPlayer.currentTime = time;
+            });
+
+            volumeBar.addEventListener('input', function() {
+                videoPlayer.volume = this.value / 100;
+                if (this.value == 0) {
+                    volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                } else if (this.value < 50) {
+                    volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+                } else {
+                    volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }
+            });
+
+            volumeBtn.addEventListener('click', function() {
+                if (videoPlayer.volume > 0) {
+                    videoPlayer.volume = 0;
+                    volumeBar.value = 0;
+                    this.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                } else {
+                    videoPlayer.volume = 1;
+                    volumeBar.value = 100;
+                    this.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }
+            });
+
+            fullscreenBtn.addEventListener('click', function() {
+                if (!document.fullscreenElement) {
+                    videoPlayer.requestFullscreen().catch(err => {
+                        console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+
+            randomMovieBtn.addEventListener('click', function() {
+                fetch('/api/random')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = `/player/${data.movie.id}`;
+                        }
+                    });
+            });
+
+            document.getElementById('addCommentBtn').addEventListener('click', function() {
+                const comment = prompt('Enter your comment:');
+                if (comment && comment.trim()) {
+                    addComment(comment.trim());
+                }
+            });
+        });
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function displayMovieInfo(movie) {
+            const header = document.getElementById('movieHeader');
+            const details = document.getElementById('movieDetails');
+            
+            header.innerHTML = `
+                <h1>${movie.title}</h1>
+                <div class="movie-stats">
+                    <span class="rating">${movie.rating}</span>
+                    <span>${movie.year}</span>
+                    <span>${movie.duration}</span>
+                    <span><i class="fas fa-eye"></i> ${(movie.views / 1000000).toFixed(1)}M views</span>
+                </div>
+                <div class="genre-tags">
+                    ${movie.genre.map(genre => `<span>${genre}</span>`).join('')}
+                </div>
+            `;
+            
+            details.innerHTML = `
+                <div class="detail-section">
+                    <h3><i class="fas fa-info-circle"></i> Synopsis</h3>
+                    <p>${movie.description}</p>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fas fa-users"></i> Cast</h3>
+                    <div class="cast-list">
+                        ${movie.cast.map(actor => `<span>${actor}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fas fa-user-tie"></i> Director</h3>
+                    <p>${movie.director}</p>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fas fa-calendar"></i> Released</h3>
+                    <p>${movie.upload_date}</p>
+                </div>
+            `;
+        }
+
+        function loadRecommendations(movieId) {
+            fetch(`/api/movies/${movieId}/recommendations`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const container = document.getElementById('recommendationsGrid');
+                        container.innerHTML = '';
+                        
+                        data.recommendations.forEach(movie => {
+                            const card = document.createElement('div');
+                            card.className = 'recommendation-card';
+                            card.innerHTML = `
+                                <div class="rec-poster" style="background-image: url('${movie.poster}')">
+                                    <button onclick="window.location.href='/player/${movie.id}'">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                </div>
+                                <div class="rec-info">
+                                    <h4>${movie.title}</h4>
+                                    <div class="rec-meta">
+                                        <span>${movie.year}</span>
+                                        <span>•</span>
+                                        <span>${movie.rating}</span>
+                                    </div>
+                                </div>
+                            `;
+                            container.appendChild(card);
+                        });
+                    }
+                });
+        }
+
+        function loadComments() {
+            const sampleComments = [
+                { user: "MovieLover42", time: "2 hours ago", comment: "Amazing movie! The ending had me on the edge of my seat." },
+                { user: "Cinephile99", time: "5 hours ago", comment: "Great cinematography and acting. Highly recommended!" },
+                { user: "StreamKing", time: "1 day ago", comment: "Watched it twice already. Never gets old!" },
+                { user: "FilmBuff", time: "2 days ago", comment: "The director did an incredible job with this one." }
+            ];
+            
+            const container = document.getElementById('commentsContainer');
+            container.innerHTML = '';
+            
+            sampleComments.forEach(comment => {
+                const commentEl = document.createElement('div');
+                commentEl.className = 'comment';
+                commentEl.innerHTML = `
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            <i class="fas fa-user-circle"></i>
+                            <strong>${comment.user}</strong>
+                        </div>
+                        <span class="comment-time">${comment.time}</span>
+                    </div>
+                    <p>${comment.comment}</p>
+                `;
+                container.appendChild(commentEl);
+            });
+        }
+
+        function addComment(comment) {
+            const container = document.getElementById('commentsContainer');
+            const commentEl = document.createElement('div');
+            commentEl.className = 'comment';
+            commentEl.innerHTML = `
+                <div class="comment-header">
+                    <div class="comment-user">
+                        <i class="fas fa-user-circle"></i>
+                        <strong>You</strong>
+                    </div>
+                    <span class="comment-time">Just now</span>
+                </div>
+                <p>${comment}</p>
+            `;
+            container.prepend(commentEl);
+        }
+    </script>
+</body>
+</html>
